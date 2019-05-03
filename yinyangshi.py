@@ -51,7 +51,7 @@ def lidao(btype, count, wifi):
 
 def screen_shot():
     os.system("adb shell screencap -p /sdcard/sc.png")
-    os.system("adb pull /sdcard/sc.png")
+    os.popen("adb pull /sdcard/sc.png")
 
 
 def connect_wireless_device():
@@ -66,7 +66,6 @@ def connect_wireless_device():
         exit(0)
     os.popen("adb kill-server")
     result = os.popen("adb tcpip 5555").readlines()[-1]
-    print(result)
     if "restarting in TCP mode port: 5555" not in result:
         click.echo("请检查手机USB连接或是否已打开开发者模式")
         exit(0)
@@ -94,6 +93,7 @@ def match_pic(temp, target="sc.png"):
     imgtm = cv2.imread(f"./{temp}")
     res = cv2.matchTemplate(imgsr, imgtm, cv2.TM_CCOEFF_NORMED)
     min_val, max_val, min_loc, max_loc = cv2.minMaxLoc(res)
+    print(max_val)
     if max_val > 0.95:
         return True
     else:
@@ -108,7 +108,7 @@ def wait_for_pattern(pattern):
 
 
 def draw_pic(src):
-    empty_image = numpy.zeros((1, 2, 3), numpy.uint8)
+    empty_image = numpy.zeros((1080, 960, 3), numpy.uint8)
     cv2.imwrite(f"./{src}", empty_image)
 
 
@@ -121,3 +121,4 @@ if __name__ == '__main__':
     # screen_shot()
     # print(match_pic("3.png"))#,"2 - 副本.png"))
     # draw_pic("sc.png")
+    # print(wait_for_pattern("end_fight.png"))
